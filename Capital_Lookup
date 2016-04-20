@@ -1,0 +1,82 @@
+import requests
+from bs4 import BeautifulSoup
+
+#Pull capital data from online
+url = 'http://geographyfieldwork.com/WorldCapitalCities.htm'
+response = requests.get(url)
+html = response.content
+
+list_of_places1 = []
+soup = BeautifulSoup(html, 'html.parser')
+for tr in soup.find_all('tr')[2:-1]:
+    tds = str(tr.find_all('td'))
+    tds = tds.lower()
+    list_of_places1.append(tds)
+        
+list_of_places1 = [p.replace('<td height="17">','') for p in list_of_places1]
+list_of_places1 = [p.replace('</td>','') for p in list_of_places1]
+list_of_places1 = [p.replace('[','') for p in list_of_places1]
+list_of_places1 = [p.replace(']','') for p in list_of_places1]
+list_of_places1 = [p.replace('','') for p in list_of_places1]
+list_of_places1.pop(0)
+
+list_of_places2 = []
+
+for item in list_of_places1:
+    capitals = item.split(', ')
+    list_of_places2.append(capitals)
+
+dict_for_capitalup = {}
+dict_for_countryup = {}
+capitals = []
+countries = []
+for list in list_of_places2:
+    capitals.append(list[0])
+    countries.append(list[1])
+    
+capitals = [p.replace('*','') for p in capitals]
+    
+dict_for_capitalup = dict(zip(capitals,countries))  
+dict_for_countryup = dict(zip(countries,capitals))    
+    
+#Set program either to look up country by capital or capital by country
+def cap_start():
+    direction = ''
+    while direction != 'capital' and direction != 'country':
+        direction = input("To look up a capital by country, type 'capital'. To look up a country by capital, 'country': ")
+        if direction == 'capital':
+            countryup()
+        elif direction == 'country':
+            capitalup()
+#Decide to play again or not 
+    replay = ''
+    while replay != 'y' and direction != 'n':
+        print()
+        replay = input("Do you want to look up another country or capital? y/n")
+        if replay == 'y':
+            print()
+            cap_start()
+        elif replay == 'n':
+            print()
+            print('I hope you learned something!')
+            break
+            
+#Look up capital by country
+def countryup():
+    print()
+    cap_search = input("You want to look up the capital of what country?")
+    cap_search = cap_search.lower()
+    country_back = (dict_for_countryup[cap_search])
+    print()
+    print(country_back.upper())
+    
+#Look up country by capital
+def capitalup():
+    print()
+    ctry_search = input("You want to look up the country for what capital?")
+    ctry_search = ctry_search.lower()
+    capital_back = (dict_for_capitalup[ctry_search])
+    print()
+    print(capital_back.upper())
+    
+cap_start()
