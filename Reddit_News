@@ -1,0 +1,12 @@
+import praw
+
+r = praw.Reddit(user_agent = 'news_reader')
+number = 0
+
+submissions = r.get_subreddit('news').get_top(limit = 30)
+
+print('The current top stories on r/news are:')
+print('*-' * 25 + "*")
+for sub in submissions:
+    number = number + 1
+    print(str(number) + ". " + sub.title + ' ' + sub.url)
