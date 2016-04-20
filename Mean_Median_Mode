@@ -1,0 +1,52 @@
+#Create list of numbers
+print("Write the numbers for which you want to obtain mean, median, and mode. When you don't have any more numbers to add to the sequence, type 'none'.")
+numbers = []
+number_in = 0
+while number_in != 'none':
+    numbers.append(number_in)
+    number_in = (input("Next number:"))
+    if number_in != 'none':
+        number_in = int(number_in)  
+
+#Get mean
+def mean(numbers):
+    mean_t = 0
+    length = -1
+    for n in numbers:
+        mean_t = mean_t + n
+        length += 1
+    print("Mean: " + str(mean_t / length))
+
+#Get mode
+def mode(numbers):
+    mode_list = []
+    mode_dict = {}
+    for n in numbers:
+        if n in mode_dict:
+            mode_dict[n] += 1
+        else:
+            mode_dict[n] = 1
+    mode_dict[0] = mode_dict[0] - 1
+    for n in mode_dict:
+        mode_list.append(mode_dict[n])
+    mode_numb = 0
+    for n in mode_dict:       
+        if mode_dict[n] >= max(mode_list):
+            mode_numb += 1
+            print("Mode" + str(mode_numb) + ": " + str(n))
+
+#Get median
+def median(numbers):
+    numbers = sorted(numbers)
+    med_length = len(numbers) - 1
+    if med_length % 2 != 0:
+        print("Median: " + str(numbers[int((med_length/2)+0.5)]))
+    else:
+        print("Median: " + str((numbers[int(med_length/2)] + numbers[int(med_length/2)+1])/2))
+
+print()
+print("Your numbers: " + str(numbers[1:]))
+print()
+mean(numbers)
+median(numbers)
+mode(numbers)    
